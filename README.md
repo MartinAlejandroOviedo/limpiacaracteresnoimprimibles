@@ -1,12 +1,22 @@
 # Invisible Character Cleaner
 
-Una extensión de Chrome que elimina automáticamente los caracteres invisibles (como `\u200B`, `\uFEFF`, etc.) de las páginas web que visitas.
+Una extensión de Chrome que mejora tu experiencia de navegación eliminando caracteres invisibles y aplicando medidas anti-tracking para un entorno web más limpio y privado.
 
 ## Características
 
-*   **Limpieza Automática:** Elimina caracteres invisibles al cargar cada página.
-*   **Registro de Actividad:** Lleva un conteo total de limpiezas y registra las URLs de las páginas donde se realizó la limpieza.
-*   **Popup Informativo:** Un popup accesible desde el ícono de la extensión muestra el registro de limpiezas.
+*   **Limpieza de Caracteres Invisibles:** Elimina automáticamente caracteres invisibles (como `\u200B`, `\uFEFF`, etc.) de las páginas web que visitas.
+*   **Limpieza Manual:** Un botón en el popup te permite limpiar la página actual en cualquier momento.
+*   **Limpieza Automática:** Opción para activar la limpieza de caracteres invisibles al cargar cada página.
+*   **Limpieza Avanzada (Anti-tracking):** Una opción configurable que aplica medidas adicionales como:
+    *   Eliminación de iframes y scripts de tracking sospechosos.
+    *   Limpieza de meta y link tags relacionados con tracking.
+    *   Desactivación de `navigator.sendBeacon`.
+    *   Eliminación de atributos `data-*`.
+    *   Prevención de secuestro del portapapeles.
+    *   Spoofing de APIs de Fingerprinting.
+*   **Puntaje de Limpieza Web:** El popup muestra un puntaje (0-10) que indica cuán "limpia" o "contaminada" está la página actual, con indicadores visuales (🟢 Limpia, 🟡 Dudosa, 🔴 Contaminada).
+*   **Información del Sitio:** El popup muestra el favicon y el dominio de la página actual.
+*   **Registro de Actividad:** Lleva un conteo total de limpiezas y registra las URLs de las páginas donde se realizó la limpieza automática.
 
 ## Instalación
 
@@ -23,11 +33,18 @@ Alternativamente, puedes comprimir la carpeta de la extensión en un archivo `.z
 
 ## Uso
 
-Una vez instalada y activada, la extensión funciona automáticamente en segundo plano. Cada vez que visites una página web, limpiará los caracteres invisibles.
+Una vez instalada y activada, la extensión puede funcionar automáticamente en segundo plano si activas la opción de limpieza automática.
 
-Para ver el registro de limpiezas:
+Para interactuar con la extensión:
 
 1.  Haz clic en el ícono de la extensión en la barra del navegador.
-2.  Se abrirá un pequeño popup mostrando el número total de limpiezas realizadas y una lista de las páginas que han sido limpiadas.
+2.  Se abrirá un pequeño popup mostrando:
+    *   El favicon y dominio de la página actual.
+    *   El puntaje de limpieza de la página.
+    *   Estadísticas de limpieza (páginas únicas y total de veces).
+    *   Opciones para activar/desactivar la limpieza automática y avanzada.
+    *   Un botón para limpiar manualmente la página actual.
 
 ## Estructura de Archivos
+
+(Mantén o actualiza esta sección según la estructura actual de tu proyecto)
