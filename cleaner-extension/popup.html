@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,7 +9,7 @@
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 15px;
-      width: 280px;
+      width: 300px;
       background-color: #f9f9f9;
       color: #333;
     }
@@ -29,32 +30,20 @@
       font-size: 14px;
       cursor: pointer;
       border-radius: 6px;
-      transition: background 0.3s ease;
+      margin-top: 10px;
     }
 
     .button:hover {
       background: #43a047;
     }
 
-    .option {
-      margin-top: 10px; /* Ajustado el margen superior */
-      display: flex;
-      align-items: center;
-      font-size: 13px; /* Ajustado el tamaño de fuente */
-    }
-
-    .option input[type="checkbox"] {
-      margin-right: 8px;
-    }
-
     .stats {
       font-size: 13px;
-      color: #555; /* Color ligeramente ajustado */
-      margin-top: 10px; /* Ajustado el margen superior */
-      text-align: center;
+      color: #555;
+      margin-top: 10px;
     }
 
-    .website { /* Nuevo estilo para el contenedor del favicon y dominio */
+    .website {
       margin-top: 10px;
       text-align: center;
       font-size: 13px;
@@ -67,7 +56,7 @@
       margin-right: 5px;
     }
 
-    .score { /* Nuevo estilo para el puntaje */
+    .score {
       margin-top: 12px;
       padding: 10px;
       border-radius: 6px;
@@ -76,20 +65,19 @@
       font-size: 14px;
     }
 
-    /* Estilos para los diferentes niveles de puntaje */
     .score.clean {
-      background-color: #e0f8e9; /* Verde claro */
-      color: #2e7d32; /* Verde oscuro */
+      background-color: #e0f8e9;
+      color: #2e7d32;
     }
 
     .score.medium {
-      background-color: #fff8e1; /* Amarillo claro */
-      color: #ff9800; /* Naranja */
+      background-color: #fff8e1;
+      color: #ff9800;
     }
 
     .score.dirty {
-      background-color: #ffebee; /* Rojo claro */
-      color: #c62828; /* Rojo oscuro */
+      background-color: #ffebee;
+      color: #c62828;
     }
 
     footer {
@@ -99,7 +87,6 @@
       margin-top: 10px;
     }
 
-    /* Bonus visual opcional: Modo oscuro automático */
     @media (prefers-color-scheme: dark) {
       body {
         background-color: #1e1e1e;
@@ -112,10 +99,6 @@
 
       .button:hover {
         background: #2e7d32;
-      }
-
-      .stats {
-        color: #bbb;
       }
 
       .score.clean {
@@ -141,28 +124,18 @@
 </head>
 <body>
   <h1>Invisible Cleaner</h1>
-  <button id="clean" class="button">🧹 Limpiar esta página</button>
 
-  <div class="option">
-    <input type="checkbox" id="autoClean">
-    <label for="autoClean">Limpieza automática al cargar</label>
-  </div>
-
-  <div class="option">
-    <input type="checkbox" id="advancedClean">
-    <label for="advancedClean">Limpieza avanzada (anti-tracking)</label>
-  </div>
-
-  <!-- Contenedor para el favicon y dominio -->
   <div class="website">
-    <img id="website-favicon" src="" alt="Favicon" style="display:none;"> <!-- display:none por defecto -->
+    <img id="website-favicon" src="" alt="Favicon" style="display:none;">
     <span id="website-domain">Dominio: Cargando...</span>
   </div>
 
-  <div class="stats" id="stats">Cargando estadísticas...</div>
+  <div id="score" class="score">Analizando...</div>
 
-  <!-- Contenedor para el puntaje con la clase 'score' -->
-  <div id="score" class="score">Analizando página...</div>
+  <div class="stats" id="stats">Cargando síntomas...</div>
+
+  <button class="button" id="revert">🔄 Revertir tratamiento</button>
+  <button class="button" id="ignore">🚫 Ignorar y permitir acceso</button>
 
   <footer>v1.0 — por Martín Oviedo</footer>
 
