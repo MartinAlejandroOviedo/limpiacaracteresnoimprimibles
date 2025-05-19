@@ -1,8 +1,6 @@
-¡Claro, Martín! Acá va la versión **actualizada del `README.md`** con toda la gloria del nuevo sistema de **tomografía web + medicina preventiva digital**:
+# Guardar el nuevo README.md como versión 1.0.1 dentro de la carpeta de la extensión
 
----
-
-```markdown
+readme_version_101 = """
 # 🧠 Invisible Character Cleaner — Modo Tomografía Web
 
 Una extensión de Chrome que mejora tu experiencia de navegación eliminando caracteres invisibles, bloqueando rastreadores ocultos y aplicando medicina preventiva digital para protegerte de sitios web contaminados.
@@ -23,7 +21,7 @@ Una extensión de Chrome que mejora tu experiencia de navegación eliminando car
   - Revertir el tratamiento (recargar página)
   - Ignorar el tratamiento y continuar de todos modos
 - 🧽 **Limpieza de Caracteres Invisibles**:
-  - Elimina automáticamente caracteres como `\u200B`, `\uFEFF`, `\u2060`, etc.
+  - Elimina automáticamente caracteres como `\\u200B`, `\\uFEFF`, `\\u2060`, etc.
 - 🧼 **Modo Manual**:
   - Botón para limpiar manualmente cualquier página
 - 🔐 **Anti-Tracking y Protección Avanzada**:
@@ -69,8 +67,7 @@ Podés desactivar manualmente los tratamientos si querés meterte en el barro. �
 
 ## 🗂️ Estructura de Archivos
 
-```
-
+```text
 cleaner-extension/
 ├── background.js         # Lógica del botón principal (si se usa)
 ├── content.js            # Realiza el escaneo y tratamiento automático
@@ -78,24 +75,9 @@ cleaner-extension/
 ├── manifest.json         # Configuración de la extensión
 ├── popup.html            # Interfaz gráfica con diagnóstico y controles
 ├── popup.js              # Lógica del popup: diagnóstico, UI y botones
+👨‍⚕️ Filosofía del Proyecto
+“Somos médicos digitales, no dioses. Diagnosticamos, tratamos y protegemos — pero siempre dejamos que el usuario decida.”
+— Dr. Martín Oviedo, Fundación Web Limpia
 
-```
-
----
-
-## 👨‍⚕️ Filosofía del Proyecto
-
-> *“Somos médicos digitales, no dioses. Diagnosticamos, tratamos y protegemos — pero siempre dejamos que el usuario decida.”*  
-> — Dr. Martín Oviedo, Fundación Web Limpia
-
----
-
-## 📃 Licencia
-
+📃 Licencia
 Código abierto y con fines educativos. Usalo, adaptalo, compartilo. Si lo mejorás, contanos.
-
----
-
-```
-
-¿Te lo dejo guardado en un archivo `README.md` dentro del zip también?
