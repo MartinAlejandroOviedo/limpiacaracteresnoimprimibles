@@ -6,7 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const faviconImg = document.getElementById("website-favicon");
   const revertBtn = document.getElementById("revert");
   const ignoreBtn = document.getElementById("ignore");
+  const identityMode = document.getElementById("identityMode");
+  const identitySection = document.getElementById("identitySection");
+  const header = document.getElementById("header");
 
+  let clickCount = 0;
+
+  // Mostrar favicon y dominio
   chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
     try {
       const url = new URL(tab.url);
@@ -32,8 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       score.textContent = `Diagnóstico: ${estado} (Grado ${grado})`;
 
-      stats.innerHTML = `<strong>Síntomas:</strong><ul style="padding-left:20px;">` +
-        sintomas.map(s => `<li>${s}</li>`).join('') + `</ul>`;
+      stats.innerHTML = "<strong>Síntomas:</strong><ul style='padding-left:20px;'>" +
+        sintomas.map(s => `<li>${s}</li>`).join('') + "</ul>";
     });
 
     revertBtn.addEventListener("click", () => {
@@ -49,4 +55,45 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+
+  // Mostrar el modo guardado
+  chrome.storage.sync.get("identityMode", ({ identityMode: savedMode }) => {
+    if (savedMode) {
+      identityMode.value = savedMode;
+    }
+  });
+
+  // Guardar cambios de modo
+  identityMode.addEventListener("change", () => {
+    chrome.storage.sync.set({ identityMode: identityMode.value });
+  });
+
+  // Clicks para desbloquear sección avanzada
+  header.addEventListener("click", () => {
+    clickCount++;
+    if (clickCount >= 3) {
+      identitySection.style.display = "block";
+    }
+  });
 });
+
+
+  // Agregar dominio actual a la lista blanca
+  document.getElementById("whitelist").addEventListener("click", () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+      const url = new URL(tab.url);
+      const hostname = url.hostname;
+
+      chrome.storage.sync.get("whitelist", ({ whitelist }) => {
+        const lista = Array.isArray(whitelist) ? whitelist : [];
+        if (!lista.includes(hostname)) {
+          lista.push(hostname);
+          chrome.storage.sync.set({ whitelist: lista }, () => {
+            alert(`✅ ${hostname} agregado a la lista blanca.`);
+          });
+        } else {
+          alert(`ℹ️ ${hostname} ya está en la lista blanca.`);
+        }
+      });
+    });
+  });

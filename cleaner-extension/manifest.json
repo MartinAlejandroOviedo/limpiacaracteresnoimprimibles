@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Invisible Character Cleaner",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "Elimina caracteres invisibles de la página actual.",
   "permissions": ["scripting", "activeTab", "storage"],
+  "host_permissions": ["<all_urls>"],
   "action": {
     "default_title": "Limpiar caracteres no imprimibles",
     "default_icon": "icon.png",

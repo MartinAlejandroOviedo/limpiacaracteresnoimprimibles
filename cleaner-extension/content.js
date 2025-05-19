@@ -1,6 +1,15 @@
 
-// Diagnóstico y tratamiento automático al cargar la web
-(function () {
+chrome.storage.sync.get("whitelist", ({ whitelist }) => {
+  const skip = Array.isArray(whitelist) && whitelist.some(d => location.hostname.includes(d));
+  if (skip) return;
+
+  chrome.storage.sync.get("identityMode", ({ identityMode }) => {
+    if (identityMode && identityMode !== "normal") {
+      chrome.runtime.sendMessage({ action: "spoofRequest" });
+    }
+  });
+
+  // Diagnóstico + tratamiento automático
   const sintomas = [];
   const storage = chrome.storage.local;
 
@@ -33,7 +42,6 @@
     if (grado === 0) return;
 
     if (grado >= 1) {
-      // Tratamiento leve
       document.querySelectorAll("*").forEach(node => {
         if (node.nodeType === Node.TEXT_NODE && node.nodeValue) {
           node.nodeValue = node.nodeValue.replace(/[\x00-\x1F\x7F\u00A0\u2000-\u200F\u2028\u2029\u202F\u205F\u2060\u3000\uFEFF]/g, '');
@@ -42,16 +50,13 @@
     }
 
     if (grado >= 2) {
-      // Tratamiento medio
       document.querySelectorAll('iframe, img, script').forEach(el => {
         if (el.width <= 1 || el.height <= 1 || el.style.display === 'none') el.remove();
       });
     }
 
     if (grado >= 3) {
-      // Tratamiento fuerte
       document.querySelectorAll('script').forEach(s => s.remove());
-      // Desactivar APIs sospechosas
       try {
         navigator.sendBeacon = () => false;
       } catch (e) {}
@@ -62,7 +67,6 @@
     }
   }
 
-  // Análisis
   if (tieneTrackers()) sintomas.push("Trackers detectados");
   if (tieneCaracteresInvisibles()) sintomas.push("Caracteres invisibles");
   if (tieneIframesOcultos()) sintomas.push("Iframes ocultos");
@@ -89,7 +93,6 @@
     timestamp: new Date().toISOString()
   };
 
-  // Guardar resultados y aplicar tratamiento
   storage.set({ diagnostico });
   aplicarTratamiento(grado);
-})();
+});
