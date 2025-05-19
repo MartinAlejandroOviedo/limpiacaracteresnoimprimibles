@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Invisible Cleaner</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 15px;
+      width: 280px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 18px;
+      margin: 0 0 10px;
+      text-align: center;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.3s ease;
+    }
+
+    .button:hover {
+      background: #43a047;
+    }
+
+    .option {
+      margin-top: 10px; /* Ajustado el margen superior */
+      display: flex;
+      align-items: center;
+      font-size: 13px; /* Ajustado el tamaño de fuente */
+    }
+
+    .option input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .stats {
+      font-size: 13px;
+      color: #555; /* Color ligeramente ajustado */
+      margin-top: 10px; /* Ajustado el margen superior */
+      text-align: center;
+    }
+
+    .website { /* Nuevo estilo para el contenedor del favicon y dominio */
+      margin-top: 10px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .website img {
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    .score { /* Nuevo estilo para el puntaje */
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* Estilos para los diferentes niveles de puntaje */
+    .score.clean {
+      background-color: #e0f8e9; /* Verde claro */
+      color: #2e7d32; /* Verde oscuro */
+    }
+
+    .score.medium {
+      background-color: #fff8e1; /* Amarillo claro */
+      color: #ff9800; /* Naranja */
+    }
+
+    .score.dirty {
+      background-color: #ffebee; /* Rojo claro */
+      color: #c62828; /* Rojo oscuro */
+    }
+
+    footer {
+      font-size: 11px;
+      color: #aaa;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    /* Bonus visual opcional: Modo oscuro automático */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #1e1e1e;
+        color: #ddd;
+      }
+
+      .button {
+        background: #388e3c;
+      }
+
+      .button:hover {
+        background: #2e7d32;
+      }
+
+      .stats {
+        color: #bbb;
+      }
+
+      .score.clean {
+        background-color: #1b3c25;
+        color: #80e27e;
+      }
+
+      .score.medium {
+        background-color: #4f3900;
+        color: #ffcc80;
+      }
+
+      .score.dirty {
+        background-color: #5b1d1d;
+        color: #ef9a9a;
+      }
+
+      footer {
+        color: #666;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Invisible Cleaner</h1>
+  <button id="clean" class="button">🧹 Limpiar esta página</button>
+
+  <div class="option">
+    <input type="checkbox" id="autoClean">
+    <label for="autoClean">Limpieza automática al cargar</label>
+  </div>
+
+  <div class="option">
+    <input type="checkbox" id="advancedClean">
+    <label for="advancedClean">Limpieza avanzada (anti-tracking)</label>
+  </div>
+
+  <!-- Contenedor para el favicon y dominio -->
+  <div class="website">
+    <img id="website-favicon" src="" alt="Favicon" style="display:none;"> <!-- display:none por defecto -->
+    <span id="website-domain">Dominio: Cargando...</span>
+  </div>
+
+  <div class="stats" id="stats">Cargando estadísticas...</div>
+
+  <!-- Contenedor para el puntaje con la clase 'score' -->
+  <div id="score" class="score">Analizando página...</div>
+
+  <footer>v1.0 — por Martín Oviedo</footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
