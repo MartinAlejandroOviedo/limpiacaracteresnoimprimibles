@@ -1,3 +1,8 @@
+¡Claro, Martín! Acá va la versión **actualizada del `README.md`** con toda la gloria del nuevo sistema de **tomografía web + medicina preventiva digital**:
+
+---
+
+```markdown
 # 🧠 Invisible Character Cleaner — Modo Tomografía Web
 
 Una extensión de Chrome que mejora tu experiencia de navegación eliminando caracteres invisibles, bloqueando rastreadores ocultos y aplicando medicina preventiva digital para protegerte de sitios web contaminados.
@@ -64,3 +69,33 @@ Podés desactivar manualmente los tratamientos si querés meterte en el barro. �
 
 ## 🗂️ Estructura de Archivos
 
+```
+
+cleaner-extension/
+├── background.js         # Lógica del botón principal (si se usa)
+├── content.js            # Realiza el escaneo y tratamiento automático
+├── icon.png              # Ícono visible en la barra de Chrome
+├── manifest.json         # Configuración de la extensión
+├── popup.html            # Interfaz gráfica con diagnóstico y controles
+├── popup.js              # Lógica del popup: diagnóstico, UI y botones
+
+```
+
+---
+
+## 👨‍⚕️ Filosofía del Proyecto
+
+> *“Somos médicos digitales, no dioses. Diagnosticamos, tratamos y protegemos — pero siempre dejamos que el usuario decida.”*  
+> — Dr. Martín Oviedo, Fundación Web Limpia
+
+---
+
+## 📃 Licencia
+
+Código abierto y con fines educativos. Usalo, adaptalo, compartilo. Si lo mejorás, contanos.
+
+---
+
+```
+
+¿Te lo dejo guardado en un archivo `README.md` dentro del zip también?
