@@ -74,8 +74,46 @@ cleaner-extension/
 ├── popup.html            # Interfaz gráfica con diagnóstico y controles
 ├── popup.js              # Lógica del popup: diagnóstico, UI y botones
 👨‍⚕️ Filosofía del Proyecto
+
+```
+
 “Somos médicos digitales, no dioses. Diagnosticamos, tratamos y protegemos — pero siempre dejamos que el usuario decida.”
 — Dr. Martín Oviedo, Fundación Web Limpia
 
 📃 Licencia
 Código abierto y con fines educativos. Usalo, adaptalo, compartilo. Si lo mejorás, contanos.
+
+# 💵 Dame dinero
+
+Sí, así nomás. No como aire ni estoy enchufado a la corriente eléctrica.
+
+Soy **Martín Alejandro Oviedo**: escritor, músico, mago autodidacta y desarrollador fullstack. Hago todo esto porque me importa, no porque me sobra el tiempo ni el saldo.
+
+---
+
+## 🧠 ¿Qué hago?
+
+- Herramientas para limpiar la web de porquería.
+- Libros que enseñan, provocan y despiertan.
+- Canciones que no suenan en la radio pero te van a quedar pegadas.
+- Proyectos de IA hechos con código y con conciencia.
+
+---
+
+## ☕ ¿Querés devolver algo?
+
+Si alguna vez:
+- Te ayudó uno de mis tutoriales
+- Te limpió una página mi extensión
+- Te tocó algo una letra mía
+- O simplemente querés ver a alguien seguir creando sin venderse...
+
+Entonces podés hacer algo muy simple:
+
+[![💵 Dame dinero](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/martinalejandrooviedo)
+
+---
+
+Gracias por bancar la independencia real.  
+Esto no es un crowdfunding de promesas vacías. Es una invitación a que lo que vale, **siga existiendo**.
+
