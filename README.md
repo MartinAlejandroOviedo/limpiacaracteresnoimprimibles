@@ -1,6 +1,4 @@
-# Guardar el nuevo README.md como versión 1.0.1 dentro de la carpeta de la extensión
 
-readme_version_101 = """
 # 🧠 Invisible Character Cleaner — Modo Tomografía Web
 
 Una extensión de Chrome que mejora tu experiencia de navegación eliminando caracteres invisibles, bloqueando rastreadores ocultos y aplicando medicina preventiva digital para protegerte de sitios web contaminados.
