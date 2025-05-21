@@ -1,4 +1,3 @@
-
 chrome.storage.sync.get("whitelist", ({ whitelist }) => {
   const skip = Array.isArray(whitelist) && whitelist.some(d => location.hostname.includes(d));
   if (skip) return;
@@ -13,29 +12,36 @@ chrome.storage.sync.get("whitelist", ({ whitelist }) => {
   const sintomas = [];
   const storage = chrome.storage.local;
 
-  function tieneTrackers() {
-    return !!document.querySelector('script[src*="track"], script[src*="analytics"], script[src*="ads"]');
+  function contarTrackers() {
+    const trackers = document.querySelectorAll('script[src*="track"], script[src*="analytics"], script[src*="ads"], script[src*="facebook"], script[src*="google"], script[src*="gtm"]');
+    return trackers.length;
   }
 
-  function tieneCaracteresInvisibles() {
+  function contarCaracteresInvisibles() {
     const invisibles = document.body.innerText.match(/[\u200B-\u200F\uFEFF\u2060]/g);
-    return invisibles && invisibles.length > 10;
+    return invisibles ? invisibles.length : 0;
   }
 
-  function tieneIframesOcultos() {
-    return [...document.querySelectorAll('iframe')].some(i => i.width <= 1 || i.height <= 1 || i.style.display === 'none');
+  function contarIframesOcultos() {
+    const iframes = [...document.querySelectorAll('iframe')].filter(i => 
+      i.width <= 1 || i.height <= 1 || i.style.display === 'none' || i.style.visibility === 'hidden'
+    );
+    return iframes.length;
   }
 
-  function usaBeacon() {
-    return typeof navigator.sendBeacon === 'function';
+  function detectarBeacon() {
+    return typeof navigator.sendBeacon === 'function' ? 1 : 0;
   }
 
-  function usaFingerprinting() {
-    return !!(navigator.deviceMemory || navigator.hardwareConcurrency);
+  function detectarFingerprinting() {
+    return (navigator.deviceMemory || navigator.hardwareConcurrency) ? 1 : 0;
   }
 
-  function tieneEvalObfuscado() {
-    return [...document.querySelectorAll('script:not([src])')].some(s => s.innerText.includes("eval(") || s.innerText.includes("new Function"));
+  function contarEvalObfuscado() {
+    const scripts = [...document.querySelectorAll('script:not([src])')].filter(s => 
+      s.innerText.includes("eval(") || s.innerText.includes("new Function")
+    );
+    return scripts.length;
   }
 
   function aplicarTratamiento(grado) {
@@ -67,17 +73,29 @@ chrome.storage.sync.get("whitelist", ({ whitelist }) => {
     }
   }
 
-  if (tieneTrackers()) sintomas.push("Trackers detectados");
-  if (tieneCaracteresInvisibles()) sintomas.push("Caracteres invisibles");
-  if (tieneIframesOcultos()) sintomas.push("Iframes ocultos");
-  if (usaBeacon()) sintomas.push("Uso de sendBeacon");
-  if (usaFingerprinting()) sintomas.push("Fingerprinting activo");
-  if (tieneEvalObfuscado()) sintomas.push("Uso de eval / función dinámica");
+  // Contar elementos maliciosos
+  const numTrackers = contarTrackers();
+  const numInvisibles = contarCaracteresInvisibles();
+  const numIframes = contarIframesOcultos();
+  const numEval = contarEvalObfuscado();
+  const hasBeacon = detectarBeacon();
+  const hasFingerprinting = detectarFingerprinting();
 
-  const grado = sintomas.length >= 6 ? 4 :
-                sintomas.length >= 5 ? 3 :
-                sintomas.length >= 3 ? 2 :
-                sintomas.length >= 1 ? 1 : 0;
+  // Agregar síntomas con cantidades
+  if (numTrackers > 0) sintomas.push(`Trackers detectados (${numTrackers})`);
+  if (numInvisibles > 10) sintomas.push(`Caracteres invisibles (${numInvisibles})`);
+  if (numIframes > 0) sintomas.push(`Iframes ocultos (${numIframes})`);
+  if (hasBeacon > 0) sintomas.push("Uso de sendBeacon");
+  if (hasFingerprinting > 0) sintomas.push("Fingerprinting activo");
+  if (numEval > 0) sintomas.push(`Uso de eval/función dinámica (${numEval})`);
+
+  // Calcular grado basado en la suma ponderada
+  const puntajeTotal = numTrackers * 0.5 + numInvisibles * 0.1 + numIframes * 0.8 + numEval * 1 + hasBeacon * 2 + hasFingerprinting * 3;
+  
+  const grado = puntajeTotal >= 15 ? 4 :
+                puntajeTotal >= 10 ? 3 :
+                puntajeTotal >= 5 ? 2 :
+                puntajeTotal >= 1 ? 1 : 0;
 
   const estado = grado === 0 ? '🟢 Saludable' :
                  grado === 1 ? '🟡 Dudosa' :
@@ -90,7 +108,15 @@ chrome.storage.sync.get("whitelist", ({ whitelist }) => {
     grado,
     estado,
     url: location.href,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    detalles: {
+      trackers: numTrackers,
+      iframesOcultos: numIframes,
+      caracteresInvisibles: numInvisibles,
+      evalObfuscado: numEval,
+      beacon: hasBeacon,
+      fingerprinting: hasFingerprinting
+    }
   };
 
   storage.set({ diagnostico });
