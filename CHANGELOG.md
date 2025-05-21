@@ -4,16 +4,17 @@ Registro de cambios por versión.
 
 ---
 
-## [1.0.2] — Web Quimera Protocol ☣
+## [1.0.9] — Web Quimera Protocol & Protección Extrema 🛡️
 
 ### 🚀 Nuevas características
-- ✳️ **Diagnóstico “Web Quimera”**: detecta múltiples errores JavaScript como síntoma crítico.
-- ☣️ **Grado 5**: reemplazo total del contenido HTML de la página si se considera una abominación digital.
-- 🔥 Sistema de evaluación reforzado: errores JS ahora aumentan el grado de riesgo automáticamente.
+- ☣️ **Web Quimera Protocol**: detección avanzada que incluye errores críticos de JavaScript en la página.
+- 🔥 **Grado 5**: bloqueo total y reemplazo del contenido de páginas con comportamiento digital malicioso extremo.
+- 🛠️ Mejoras en el diagnóstico y tratamiento para combatir scripts maliciosos y obfuscados.
+- 🧪 Pruebas y ajustes finos para minimizar falsos positivos y mejorar precisión.
 
 ---
 
-## [1.0.1] — Diagnóstico Avanzado y Tratamientos
+## [1.0.8] — Diagnóstico Avanzado y Tratamientos
 
 ### ✅ Mejoras
 - 📊 Se agregó **sistema de calificación**: Saludable 🟢, Dudosa 🟡, Sospechosa 🟠, Contaminada 🔴, Peligrosa 🛑.
