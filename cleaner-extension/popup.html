@@ -17,7 +17,6 @@
     </section>
 
     <section id="stats" class="stats-section">
-      <!-- El contenido del diagnóstico (síntomas y detalles técnicos) se cargará aquí por popup.js -->
       <p>No se pudo recuperar el diagnóstico de esta pestaña. Asegúrate de que la página haya cargado completamente.</p>
     </section>
 
@@ -26,8 +25,6 @@
       <button id="ignore" class="btn">Ignorar Tratamiento (Sesión)</button>
       <button id="whitelist" class="btn">Agregar a Lista Blanca</button>
       <button id="generate-report" class="btn">Generar Informe Detallado</button>
-      <!-- Si añadiste un botón para regenerar el reporte, asegúrate de que esté aquí con el ID correcto -->
-      <!-- <button id="regenerate-report-btn" class="btn">Regenerar Informe</button> -->
     </section>
 
     <section id="identitySection" class="identity-section" style="display: none;">
@@ -43,17 +40,17 @@
     <section class="whitelist-section">
       <h3>Lista Blanca</h3>
       <ul id="whitelist-list" class="whitelist-list">
-        <!-- Los dominios de la lista blanca se cargarán aquí por popup.js -->
         <li>Cargando lista blanca...</li>
       </ul>
     </section>
 
     <footer class="about-section">
-      <p>Invisible Cleaner v1.0</p>
+      <p id="version-info">Invisible Cleaner</p>
       <p>Herramienta de seguridad y privacidad web</p>
     </footer>
   </div>
 
-  <script src="popup.js"></script>
+  <script src="popup_completo_md_utf8.js"></script>
+  <script src="version.js"></script>
 </body>
 </html>

@@ -1,0 +1,56 @@
+{
+  "categorias": {
+    "adorable": "\u00datil, inocente y posiblemente kawaii.",
+    "basura": "No sirve para nada visible ni \u00fatil. Ruido digital.",
+    "inservible": "Cosa que carga pero no aporta nada. Podr\u00eda ser un recuerdo corrupto de Internet.",
+    "desconocido": "A\u00fan no catalogado. Ojo con esto.",
+    "nulo": "Sin src, link roto, iframe fantasma.",
+    "malintencionado": "Puro espionaje. Vive para rastrearte y monetizarte."
+  },
+  "iframes": {
+    "fbsbx.com": {
+      "nombre": "Facebook Silent Tracker",
+      "tipo": "iframe esp\u00eda",
+      "riesgo": "malintencionado",
+      "comentario": "Oculto y recolectando datos como un ladr\u00f3n con invisibilidad."
+    },
+    "youtube.com": {
+      "nombre": "YouTube Embed",
+      "tipo": "contenido multimedia",
+      "riesgo": "adorable",
+      "comentario": "Muestra videos y, aunque rastrea, al menos entretiene."
+    },
+    "recaptcha.net": {
+      "nombre": "Google reCAPTCHA",
+      "tipo": "autenticaci\u00f3n y an\u00e1lisis",
+      "riesgo": "inservible",
+      "comentario": "Hace su trabajo, pero tambi\u00e9n mete el dedo en tu fingerprint."
+    }
+  },
+  "trackers": {
+    "google-analytics.com": {
+      "nombre": "Google Analytics",
+      "tipo": "anal\u00edtica",
+      "riesgo": "malintencionado",
+      "comentario": "Te sigue como tu ex t\u00f3xica con acceso a tus cookies."
+    },
+    "facebook.net": {
+      "nombre": "Facebook Pixel",
+      "tipo": "tracker publicitario",
+      "riesgo": "malintencionado",
+      "comentario": "Vive para rastrearte hasta en tus sue\u00f1os."
+    },
+    "doubleclick.net": {
+      "nombre": "DoubleClick Ads",
+      "tipo": "anuncios",
+      "riesgo": "malintencionado",
+      "comentario": "No importa lo que hagas, este te ve desde las sombras de Google."
+    },
+    "statcounter.com": {
+      "nombre": "StatCounter",
+      "tipo": "anal\u00edtica b\u00e1sica",
+      "riesgo": "adorable",
+      "comentario": "Solo quiere contar visitas, d\u00e9jalo jugar con sus n\u00fameros."
+    }
+  }
+}
