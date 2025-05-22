@@ -1,9 +1,10 @@
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === "spoofRequest" && sender.tab?.id) {
-    chrome.scripting.executeScript({
-      target: { tabId: sender.tab.id },
-      files: ["spoof.js"]
-    });
-  }
+chrome.runtime.onStartup.addListener(() => {
+  console.log("Extension started.");
+});
+
+chrome.runtime.onSuspend.addListener(() => {
+  chrome.storage.local.remove("reportesPorDominio", () => {
+    console.log("reportesPorDominio limpiado al cerrar.");
+  });
 });

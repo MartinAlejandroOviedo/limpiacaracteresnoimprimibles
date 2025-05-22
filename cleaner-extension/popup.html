@@ -1,158 +1,57 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Invisible Cleaner</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 15px;
-      width: 300px;
-      background-color: #f9f9f9;
-      color: #333;
-    }
-
-    h1 {
-      font-size: 18px;
-      margin: 0 0 10px;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .button {
-      display: block;
-      width: 100%;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      padding: 10px;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 6px;
-      margin-top: 10px;
-    }
-
-    .button:hover {
-      background: #43a047;
-    }
-
-    .stats {
-      font-size: 13px;
-      color: #555;
-      margin-top: 10px;
-    }
-
-    .website {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 13px;
-    }
-
-    .website img {
-      width: 16px;
-      height: 16px;
-      vertical-align: middle;
-      margin-right: 5px;
-    }
-
-    .score {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: bold;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .score.clean { background-color: #e0f8e9; color: #2e7d32; }
-    .score.medium { background-color: #fff8e1; color: #ff9800; }
-    .score.dirty { background-color: #ffebee; color: #c62828; }
-
-    .advanced {
-      display: none;
-      margin-top: 15px;
-    }
-
-    footer {
-      font-size: 11px;
-      color: #aaa;
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body { background-color: #1e1e1e; color: #ddd; }
-      .button { background: #388e3c; }
-      .button:hover { background: #2e7d32; }
-      .score.clean { background-color: #1b3c25; color: #80e27e; }
-      .score.medium { background-color: #4f3900; color: #ffcc80; }
-      .score.dirty { background-color: #5b1d1d; color: #ef9a9a; }
-      footer { color: #666; }
-    }
-
-  /* Agregar esto al estilo existente */
-  .score::before {
-    content: "";
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 8px;
-  }
-
-  .score.clean::before {
-    background-color: #2e7d32;
-  }
-
-  .score.medium::before {
-    background-color: #ff9800;
-  }
-
-  .score.dirty::before {
-    background-color: #c62828;
-  }
-
-  /* Asegurarse que no hay otros estilos que agreguen íconos */
-</style>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <h1 id="header">Invisible Cleaner</h1>
+  <div class="container">
+    <header id="header" class="header">
+      <img id="website-favicon" class="favicon" src="" alt="Favicon" style="display: none;">
+      <span id="website-domain" class="domain">Cargando...</span>
+    </header>
 
-  <div class="website">
-    <img id="website-favicon" src="" alt="Favicon" style="display:none;">
-    <span id="website-domain">Dominio: Cargando...</span>
-  </div>
+    <section class="score-section">
+      <div id="score" class="score">Cargando diagnóstico...</div>
+    </section>
 
-  <div id="score" class="score">Analizando...</div>
-  <div class="stats" id="stats">Cargando síntomas...</div>
+    <section id="stats" class="stats-section">
+      <!-- El contenido del diagnóstico (síntomas y detalles técnicos) se cargará aquí por popup.js -->
+      <p>No se pudo recuperar el diagnóstico de esta pestaña. Asegúrate de que la página haya cargado completamente.</p>
+    </section>
 
-  <button class="button" id="revert">🔄 Revertir tratamiento</button>
-  <button class="button" id="ignore">🚫 Ignorar y permitir acceso</button>
-  <button class="button" id="whitelist">➕ Agregar a la lista blanca</button>
+    <section class="actions-section">
+      <button id="revert" class="btn">Revertir Tratamiento</button>
+      <button id="ignore" class="btn">Ignorar Tratamiento (Sesión)</button>
+      <button id="whitelist" class="btn">Agregar a Lista Blanca</button>
+      <button id="generate-report" class="btn">Generar Informe Detallado</button>
+      <!-- Si añadiste un botón para regenerar el reporte, asegúrate de que esté aquí con el ID correcto -->
+      <!-- <button id="regenerate-report-btn" class="btn">Regenerar Informe</button> -->
+    </section>
 
-  <div class="advanced" id="identitySection">
-    <label for="identityMode">Modo de identidad digital:</label>
-    <select id="identityMode">
-      <option value="normal">🧍‍♂️ Normal</option>
-      <option value="croto">🧦 Croto</option>
-      <option value="billonario">👑 Billonario</option>
-    </select>
-  </div>
+    <section id="identitySection" class="identity-section" style="display: none;">
+      <h3>Modo de identidad digital</h3>
+      <label for="identityMode" class="label">Selecciona un modo:</label>
+      <select id="identityMode" class="select">
+        <option value="normal">🧍‍♂️ Normal</option>
+        <option value="croto">🧦 Croto</option>
+        <option value="billonario">👑 Billonario</option>
+      </select>
+    </section>
 
-  <footer>v1.0 — por Martín Oviedo</footer>
+    <section class="whitelist-section">
+      <h3>Lista Blanca</h3>
+      <ul id="whitelist-list" class="whitelist-list">
+        <!-- Los dominios de la lista blanca se cargarán aquí por popup.js -->
+        <li>Cargando lista blanca...</li>
+      </ul>
+    </section>
 
-  <!-- AGREGADO: Botón About y Modal -->
-  <button id="aboutBtn" style="position: absolute; top: 5px; right: 5px; background: none; border: none; cursor: pointer; font-size: 12px; z-index: 1000;">ℹ️</button>
-
-  <div id="aboutModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; padding: 20px; box-sizing: border-box;">
-    <div style="background: white; padding: 20px; border-radius: 8px; max-width: 280px; margin: 20px auto; position: relative;">
-      <h3 style="margin-top: 0;">Invisible Cleaner</h3>
-      <p>Versión 1.0.1</p>
-      <p>Desarrollado por Martín Oviedo</p>
-      <div id="donationButton" style="margin: 15px 0;"></div>
-      <button id="closeAbout" style="width: 100%; padding: 8px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Cerrar</button>
-    </div>
+    <footer class="about-section">
+      <p>Invisible Cleaner v1.0</p>
+      <p>Herramienta de seguridad y privacidad web</p>
+    </footer>
   </div>
 
   <script src="popup.js"></script>
