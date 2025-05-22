@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Invisible Cleaner</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header id="header" class="header">
+      <img id="website-favicon" class="favicon" src="" alt="Favicon" style="display: none;">
+      <span id="website-domain" class="domain">Cargando...</span>
+    </header>
+
+    <section class="score-section">
+      <div id="score" class="score">Cargando diagnóstico...</div>
+    </section>
+
+    <section id="stats" class="stats-section">
+      <!-- El contenido del diagnóstico (síntomas y detalles técnicos) se cargará aquí por popup.js -->
+      <p>No se pudo recuperar el diagnóstico de esta pestaña. Asegúrate de que la página haya cargado completamente.</p>
+    </section>
+
+    <section class="actions-section">
+      <button id="revert" class="btn">Revertir Tratamiento</button>
+      <button id="ignore" class="btn">Ignorar Tratamiento (Sesión)</button>
+      <button id="whitelist" class="btn">Agregar a Lista Blanca</button>
+      <button id="generate-report" class="btn">Generar Informe Detallado</button>
+      <!-- Si añadiste un botón para regenerar el reporte, asegúrate de que esté aquí con el ID correcto -->
+      <!-- <button id="regenerate-report-btn" class="btn">Regenerar Informe</button> -->
+    </section>
+
+    <section id="identitySection" class="identity-section" style="display: none;">
+      <h3>Modo de identidad digital</h3>
+      <label for="identityMode" class="label">Selecciona un modo:</label>
+      <select id="identityMode" class="select">
+        <option value="normal">🧍‍♂️ Normal</option>
+        <option value="croto">🧦 Croto</option>
+        <option value="billonario">👑 Billonario</option>
+      </select>
+    </section>
+
+    <section class="whitelist-section">
+      <h3>Lista Blanca</h3>
+      <ul id="whitelist-list" class="whitelist-list">
+        <!-- Los dominios de la lista blanca se cargarán aquí por popup.js -->
+        <li>Cargando lista blanca...</li>
+      </ul>
+    </section>
+
+    <footer class="about-section">
+      <p>Invisible Cleaner v1.0</p>
+      <p>Herramienta de seguridad y privacidad web</p>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
