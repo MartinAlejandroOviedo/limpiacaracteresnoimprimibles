@@ -1,146 +1,86 @@
-// report.js
 
-/**
- * Escanea la página actual y recopila información detallada sobre elementos potencialmente maliciosos.
- * @returns {object} Un objeto con los detalles del informe.
- */
-function generateDetailedReportData() {
-  const trackers = [];
-  document.querySelectorAll('script[src*="track"], script[src*="analytics"], script[src*="ads"], script[src*="facebook"], script[src*="google"], script[src*="gtm"]').forEach(script => {
-    trackers.push({ type: 'script', src: script.src });
-  });
-
-  const iframes = [];
-  [...document.querySelectorAll('iframe')].filter(i =>
-    i.width <= 1 || i.height <= 1 || i.style.display === 'none' || i.style.visibility === 'hidden'
-  ).forEach(iframe => {
-    iframes.push({ src: iframe.src, width: iframe.width, height: iframe.height, display: iframe.style.display, visibility: iframe.style.visibility });
-  });
-
-  const evalScripts = [];
-  [...document.querySelectorAll('script:not([src])')].filter(s =>
-    s.innerText.includes("eval(") || s.innerText.includes("new Function")
-  ).forEach(script => {
-    // Capturar un fragmento del código para el informe
-    const codeSnippet = script.innerText.substring(0, 200) + (script.innerText.length > 200 ? '...' : '');
-    evalScripts.push({ type: 'inline script', snippet: codeSnippet });
-  });
-
-  const invisibleChars = document.body.innerText.match(/[\u200B-\u200F\uFEFF\u2060]/g);
-  const invisibleCharCount = invisibleChars ? invisibleChars.length : 0;
-
-  const hasBeacon = typeof navigator.sendBeacon === 'function';
-  const hasFingerprinting = (navigator.deviceMemory || navigator.hardwareConcurrency) ? true : false;
-
-
+function emoji(riesgo) {
   return {
-    url: location.href,
-    timestamp: new Date().toISOString(),
-    trackers: trackers,
-    hiddenIframes: iframes,
-    evalScripts: evalScripts,
-    invisibleCharacterCount: invisibleCharCount,
-    usesSendBeacon: hasBeacon,
-    usesFingerprinting: hasFingerprinting
-  };
+    adorable: "🧸",
+    basura: "🗑️",
+    inservible: "😶‍🌫️",
+    desconocido: "❓",
+    nulo: "🪫",
+    malintencionado: "😈"
+  }[riesgo] || "🔍";
 }
 
-/**
- * Genera el contenido HTML para la página del informe.
- * @param {object} reportData - Los datos del informe generados por generateDetailedReportData.
- * @returns {string} El HTML completo de la página del informe.
- */
-function buildReportHtml(reportData) {
-  let html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Informe Detallado - Invisible Cleaner</title>
-      <meta charset="UTF-8">
-      <style>
-        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
-        h1, h2 { color: #333; }
-        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px; }
-        .section h3 { margin-top: 0; color: #555; }
-        ul { list-style: none; padding: 0; }
-        li { margin-bottom: 10px; padding: 10px; border-bottom: 1px solid #eee; }
-        li:last-child { border-bottom: none; }
-        .detail { font-size: 0.9em; color: #666; margin-top: 5px; }
-        pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; overflow-x: auto; }
-      </style>
-    </head>
-    <body>
-      <h1>Informe Detallado de Invisible Cleaner</h1>
-      <p><strong>URL:</strong> ${reportData.url}</p>
-      <p><strong>Fecha y Hora:</strong> ${new Date(reportData.timestamp).toLocaleString()}</p>
+function renderCategoria(item) {
+  return `
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <h5 class="card-title">
+        <i class="bx bx-shield-quarter me-2"></i> ${item.nombre}
+      </h5>
+      <h6 class="card-subtitle text-muted mb-2">${item.tipo} — Riesgo: ${item.riesgo} ${item.emoji || emoji(item.riesgo)}</h6>
+      <p class="card-text"><strong>Comentario:</strong> ${item.comentario || "Sin comentario adicional."}</p>
+      <small class="text-muted">Dominio: ${item.dominio || "N/A"}</small>
+    </div>
+  </div>
+  `;
+}
 
-      <div class="section">
-        <h2>Resumen Rápido</h2>
-        <ul>
-          <li>Trackers detectados: ${reportData.trackers.length}</li>
-          <li>Iframes ocultos/pequeños: ${reportData.hiddenIframes.length}</li>
-          <li>Scripts con eval/Function: ${reportData.evalScripts.length}</li>
-          <li>Caracteres invisibles: ${reportData.invisibleCharacterCount}</li>
-          <li>Usa sendBeacon: ${reportData.usesSendBeacon ? 'Sí' : 'No'}</li>
-          <li>Usa Fingerprinting (heurística): ${reportData.usesFingerprinting ? 'Sí' : 'No'}</li>
-        </ul>
-      </div>
+function renderReporte(reportData) {
+  let html = `
+    <p><strong>URL:</strong> ${reportData.url}</p>
+    <p><strong>Fecha y Hora:</strong> ${new Date(reportData.timestamp).toLocaleString()}</p>
+    <hr>
   `;
 
-  if (reportData.trackers.length > 0) {
-    html += `
-      <div class="section">
-        <h2>Detalles de Trackers (${reportData.trackers.length})</h2>
-        <ul>
-          ${reportData.trackers.map(t => `<li>Script SRC: <span class="detail">${t.src || 'N/A'}</span></li>`).join('')}
-        </ul>
-      </div>
-    `;
+  if (reportData.trackers?.length) {
+    html += `<h3>🎯 Trackers Detectados (${reportData.trackers.length})</h3>`;
+    reportData.trackers.forEach(t => { html += renderCategoria(t); });
   }
 
-  if (reportData.hiddenIframes.length > 0) {
-    html += `
-      <div class="section">
-        <h2>Detalles de Iframes Ocultos/Pequeños (${reportData.hiddenIframes.length})</h2>
-        <ul>
-          ${reportData.hiddenIframes.map(i => `<li>
-              SRC: <span class="detail">${i.src || 'N/A'}</span><br>
-              <span class="detail">Dimensiones: ${i.width}x${i.height}, Display: ${i.display || 'N/A'}, Visibility: ${i.visibility || 'N/A'}</span>
-            </li>`).join('')}
-        </ul>
-      </div>
-    `;
+  if (reportData.hiddenIframes?.length) {
+    html += `<h3>🪟 Iframes Ocultos (${reportData.hiddenIframes.length})</h3>`;
+    reportData.hiddenIframes.forEach(i => { html += renderCategoria(i); });
   }
 
-  if (reportData.evalScripts.length > 0) {
-    html += `
-      <div class="section">
-        <h2>Detalles de Scripts con eval/Function (${reportData.evalScripts.length})</h2>
-        <ul>
-          ${reportData.evalScripts.map(s => `<li>
-              Tipo: ${s.type}<br>
-              <span class="detail">Fragmento de código:</span>
-              <pre>${s.snippet}</pre>
-            </li>`).join('')}
-        </ul>
+  if (reportData.evalScripts?.length) {
+    html += `<h3>⚠️ Scripts con Eval / Function</h3>`;
+    html += '<div class="accordion" id="evalAccordion">';
+    reportData.evalScripts.forEach((s, index) => {
+      html += `
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading${index}">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}">
+            Script #${index + 1}
+          </button>
+        </h2>
+        <div id="collapse${index}" class="accordion-collapse collapse" data-bs-parent="#evalAccordion">
+          <div class="accordion-body"><pre>${s.snippet}</pre></div>
+        </div>
       </div>
-    `;
+      `;
+    });
+    html += '</div>';
   }
-
-   if (reportData.invisibleCharacterCount > 0) {
-     html += `
-       <div class="section">
-         <h2>Detalles de Caracteres Invisibles</h2>
-         <p>Se detectaron ${reportData.invisibleCharacterCount} caracteres invisibles en el texto del cuerpo de la página.</p>
-       </div>
-     `;
-   }
-
 
   html += `
-    </body>
-    </html>
+    <h3>🕵️ Otros Indicadores</h3>
+    <ul class="list-group mb-4">
+      <li class="list-group-item">Caracteres invisibles: ${reportData.invisibleCharacterCount}</li>
+      <li class="list-group-item">Uso de sendBeacon: ${reportData.usesSendBeacon ? "✅ Sí" : "❌ No"}</li>
+      <li class="list-group-item">Fingerprinting: ${reportData.usesFingerprinting ? "✅ Sí" : "❌ No"}</li>
+    </ul>
+    <footer class="text-center text-muted mt-5">
+      <small>Invisible Cleaner v1.0.9 — generado el ${new Date().toLocaleString()}</small>
+    </footer>
   `;
 
-  return html;
+  document.getElementById("reporteContenido").innerHTML = html;
 }
+
+chrome.storage.local.get("ultimoReporte", ({ ultimoReporte }) => {
+  if (ultimoReporte) {
+    renderReporte(ultimoReporte);
+  } else {
+    document.getElementById("reporteContenido").innerHTML = "<p>No se encontró un informe reciente.</p>";
+  }
+});

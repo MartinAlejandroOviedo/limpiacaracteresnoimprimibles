@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Invisible Character Cleaner",
-  "version": "1.0.1",
-  "description": "Elimina caracteres invisibles de la p\u00e1gina actual.",
+  "version": "1.0.9",
+  "description": "Elimina caracteres invisibles y detecta elementos maliciosos en la página actual.",
   "permissions": [
     "scripting",
     "activeTab",
@@ -31,15 +31,20 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
+      "matches": ["<all_urls>"],
       "js": [
         "analyzer.js",
         "report_clasificado.js",
+        "spoof.js",
         "content.js"
       ],
       "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["categorias_rastreo_ampliadas.json"],
+      "matches": ["<all_urls>"]
     }
   ]
 }

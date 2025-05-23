@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const stats = document.getElementById("stats");
   const score = document.getElementById("score");
@@ -90,8 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
         (diagnostico.trackers?.length > 0 ? 1 : 0) +
         (diagnostico.hiddenIframes?.length > 0 ? 1 : 0) +
         (diagnostico.evalScripts?.length > 0 ? 1 : 0) +
-        (diagnostico.invisibleCharacterCount > 20 ? 1 : 0) +
-        (diagnostico.usesFingerprinting ? 1 : 0)
+        (diagnostico.invisibleCharacterCount > 20 ? 1 : 0) 
+        //(diagnostico.usesFingerprinting ? 1 : 0)
       );
       const estado = diagnostico.estado || ["Limpia", "Leve", "Moderada", "Contaminada", "Abominación"][grado];
       const detalles = diagnostico.detalles || diagnostico;
@@ -152,5 +151,280 @@ function buildReportHtml(reportData) {
   html += `<p><strong>sendBeacon:</strong> ${reportData.usesSendBeacon ? "Sí" : "No"}</p>`;
   html += `<p><strong>Fingerprinting:</strong> ${reportData.usesFingerprinting ? "Sí" : "No"}</p>`;
   html += `</body></html>`;
+  return html;
+}
+
+function buildReportHtml(reportData) {
+  const emoji = (riesgo) => {
+    return {
+      adorable: "🧸",
+      basura: "🗑️",
+      inservible: "😶‍🌫️",
+      desconocido: "❓",
+      nulo: "🪫",
+      malintencionado: "😈"
+    }[riesgo] || "🔍";
+  };
+
+  let html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Informe Detallado - Invisible Cleaner</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <style>
+        body { padding: 20px; }
+        .item-card { margin-bottom: 20px; }
+        .emoji { font-size: 1.5rem; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1 class="mb-4">🧽 Informe de Invisible Cleaner</h1>
+        <p><strong>URL:</strong> \${reportData.url}</p>
+        <p><strong>Fecha y Hora:</strong> \${new Date(reportData.timestamp).toLocaleString()}</p>
+        <hr>
+  \`;
+
+  const renderCategoria = (item) => \`
+    <div class="card item-card">
+      <div class="card-body">
+        <h5 class="card-title"><span class="emoji">\${item.emoji}</span> \${item.nombre}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">\${item.tipo} — Riesgo: \${item.riesgo}</h6>
+        <p class="card-text">\${item.comentario || "Sin comentario adicional."}</p>
+        <small class="text-muted">Dominio: \${item.dominio}</small>
+      </div>
+    </div>
+  \`;
+
+  if (reportData.trackers?.length) {
+    html += \`<h3>🎯 Trackers Detectados (\${reportData.trackers.length})</h3>\`;
+    reportData.trackers.forEach(t => { html += renderCategoria(t); });
+  }
+
+  if (reportData.hiddenIframes?.length) {
+    html += \`<h3>🪟 Iframes Ocultos (\${reportData.hiddenIframes.length})</h3>\`;
+    reportData.hiddenIframes.forEach(i => { html += renderCategoria(i); });
+  }
+
+  if (reportData.evalScripts?.length) {
+    html += \`<h3>⚠️ Scripts con Eval / Function</h3>\`;
+    html += "<ul class='list-group mb-4'>";
+    reportData.evalScripts.forEach(s => {
+      html += \`<li class='list-group-item'><pre>\${s.snippet}</pre></li>\`;
+    });
+    html += "</ul>";
+  }
+
+  html += \`
+    <h3>🕵️ Otros Indicadores</h3>
+    <ul class="list-group mb-4">
+      <li class="list-group-item">Caracteres invisibles: \${reportData.invisibleCharacterCount}</li>
+      <li class="list-group-item">Uso de sendBeacon: \${reportData.usesSendBeacon ? "✅ Sí" : "❌ No"}</li>
+      <li class="list-group-item">Fingerprinting: \${reportData.usesFingerprinting ? "✅ Sí" : "❌ No"}</li>
+    </ul>
+    <footer class="text-center text-muted mt-5">
+      <small>Invisible Cleaner v1.0.1 — generado el \${new Date().toLocaleString()}</small>
+    </footer>
+    </div>
+    </body>
+    </html>
+  \``;
+
+  return html;
+}
+
+
+function buildReportHtml(reportData) {
+  const emoji = (riesgo) => {
+    return {
+      adorable: "🧸",
+      basura: "🗑️",
+      inservible: "😶‍🌫️",
+      desconocido: "❓",
+      nulo: "🪫",
+      malintencionado: "😈"
+    }[riesgo] || "🔍";
+  };
+
+  const renderCategoria = (item) => `
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="bx bx-shield-quarter me-2"></i> \${item.nombre}
+        </h5>
+        <h6 class="card-subtitle text-muted mb-2">\${item.tipo} — Riesgo: \${item.riesgo} \${item.emoji || emoji(item.riesgo)}</h6>
+        <p class="card-text"><strong>Comentario:</strong> \${item.comentario || "Sin comentario adicional."}</p>
+        <small class="text-muted">Dominio: \${item.dominio || "N/A"}</small>
+      </div>
+    </div>
+  \`;
+
+  let html = \`
+  <!DOCTYPE html>
+  <html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <title>Informe Detallado - Invisible Cleaner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+      body { padding: 2rem; background-color: #f8f9fa; }
+      .container { max-width: 800px; margin: auto; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mb-4"><i class='bx bx-search-alt'></i> Informe de Invisible Cleaner</h1>
+      <p><strong>URL:</strong> \${reportData.url}</p>
+      <p><strong>Fecha y Hora:</strong> \${new Date(reportData.timestamp).toLocaleString()}</p>
+      <hr>
+  \`;
+
+  if (reportData.trackers?.length) {
+    html += \`<h3 class="mt-4">🎯 Trackers Detectados (\${reportData.trackers.length})</h3>\`;
+    reportData.trackers.forEach(t => { html += renderCategoria(t); });
+  }
+
+  if (reportData.hiddenIframes?.length) {
+    html += \`<h3 class="mt-4">🪟 Iframes Ocultos (\${reportData.hiddenIframes.length})</h3>\`;
+    reportData.hiddenIframes.forEach(i => { html += renderCategoria(i); });
+  }
+
+  if (reportData.evalScripts?.length) {
+    html += \`<h3 class="mt-4">⚠️ Scripts con Eval / Function</h3>\`;
+    html += '<div class="accordion" id="evalAccordion">';
+    reportData.evalScripts.forEach((s, index) => {
+      html += \`
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading\${index}">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse\${index}">
+            Script #\${index + 1}
+          </button>
+        </h2>
+        <div id="collapse\${index}" class="accordion-collapse collapse" data-bs-parent="#evalAccordion">
+          <div class="accordion-body"><pre>\${s.snippet}</pre></div>
+        </div>
+      </div>
+      \`;
+    });
+    html += '</div>';
+  }
+
+  html += \`
+    <h3 class="mt-4">🕵️ Otros Indicadores</h3>
+    <ul class="list-group mb-4">
+      <li class="list-group-item">Caracteres invisibles: \${reportData.invisibleCharacterCount}</li>
+      <li class="list-group-item">Uso de sendBeacon: \${reportData.usesSendBeacon ? "✅ Sí" : "❌ No"}</li>
+      <li class="list-group-item">Fingerprinting: \${reportData.usesFingerprinting ? "✅ Sí" : "❌ No"}</li>
+    </ul>
+
+    <footer class="text-center text-muted mt-5">
+      <small>Invisible Cleaner v1.0.9 — generado el \${new Date().toLocaleString()}</small>
+    </footer>
+    </div>
+  </body>
+  </html>
+  \``;
+
+  return html;
+}
+
+
+function buildReportHtml(reportData) {
+  const emoji = (riesgo) => {
+    return {
+      adorable: "🧸",
+      basura: "🗑️",
+      inservible: "😶‍🌫️",
+      desconocido: "❓",
+      nulo: "🪫",
+      malintencionado: "😈"
+    }[riesgo] || "🔍";
+  };
+
+  function renderCategoria(item) {
+    return `
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="bx bx-shield-quarter me-2"></i> ${item.nombre}
+        </h5>
+        <h6 class="card-subtitle text-muted mb-2">${item.tipo} — Riesgo: ${item.riesgo} ${item.emoji || emoji(item.riesgo)}</h6>
+        <p class="card-text"><strong>Comentario:</strong> ${item.comentario || "Sin comentario adicional."}</p>
+        <small class="text-muted">Dominio: ${item.dominio || "N/A"}</small>
+      </div>
+    </div>
+    `;
+  }
+
+  let html = `
+  <!DOCTYPE html>
+  <html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <title>Informe Detallado - Invisible Cleaner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+      body { padding: 2rem; background-color: #f8f9fa; }
+      .container { max-width: 800px; margin: auto; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mb-4"><i class='bx bx-search-alt'></i> Informe de Invisible Cleaner</h1>
+      <p><strong>URL:</strong> ${reportData.url}</p>
+      <p><strong>Fecha y Hora:</strong> ${new Date(reportData.timestamp).toLocaleString()}</p>
+      <hr>
+  `;
+
+  if (reportData.trackers?.length) {
+    html += `<h3 class="mt-4">🎯 Trackers Detectados (${reportData.trackers.length})</h3>`;
+    reportData.trackers.forEach(t => { html += renderCategoria(t); });
+  }
+
+  if (reportData.hiddenIframes?.length) {
+    html += `<h3 class="mt-4">🪟 Iframes Ocultos (${reportData.hiddenIframes.length})</h3>`;
+    reportData.hiddenIframes.forEach(i => { html += renderCategoria(i); });
+  }
+
+  if (reportData.evalScripts?.length) {
+    html += `<h3 class="mt-4">⚠️ Scripts con Eval / Function</h3>`;
+    html += '<div class="accordion" id="evalAccordion">';
+    reportData.evalScripts.forEach((s, index) => {
+      html += `
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading${index}">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}">
+            Script #${index + 1}
+          </button>
+        </h2>
+        <div id="collapse${index}" class="accordion-collapse collapse" data-bs-parent="#evalAccordion">
+          <div class="accordion-body"><pre>${s.snippet}</pre></div>
+        </div>
+      </div>
+      `;
+    });
+    html += '</div>';
+  }
+
+  html += `
+    <h3 class="mt-4">🕵️ Otros Indicadores</h3>
+    <ul class="list-group mb-4">
+      <li class="list-group-item">Caracteres invisibles: ${reportData.invisibleCharacterCount}</li>
+      <li class="list-group-item">Uso de sendBeacon: ${reportData.usesSendBeacon ? "✅ Sí" : "❌ No"}</li>
+      <li class="list-group-item">Fingerprinting: ${reportData.usesFingerprinting ? "✅ Sí" : "❌ No"}</li>
+    </ul>
+
+    <footer class="text-center text-muted mt-5">
+      <small>Invisible Cleaner v1.0.9 — generado el ${new Date().toLocaleString()}</small>
+    </footer>
+    </div>
+  </body>
+  </html>
+  `;
+
   return html;
 }
