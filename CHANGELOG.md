@@ -3,6 +3,19 @@
 Registro de cambios por versión.
 
 ---
+## [1.1.1] — Interfaz Unificada con Clean.CSS ✨
+
+### 💄 Cambios visuales
+- 🔁 Todo el diseño fue migrado a un nuevo framework visual propio: `clean.css`.
+- 📦 Eliminación de Bootstrap para aligerar la extensión y hacerla más independiente.
+- 🧼 Rediseño total del `popup` y `report.html` con clases minimalistas y responsivas.
+
+### 🧠 Mejora de estructura
+- 📁 Limpieza de archivos no utilizados.
+- 🧪 Revisión de integración entre el CSS y los componentes JavaScript.
+- 📊 `report.js` adaptado al nuevo sistema visual con soporte para etiquetas de riesgo más limpias.
+
+> Invisible Cleaner es ahora más ligero, más limpio y más tuyo 🧠✨
 
 ## [1.0.9] — Web Quimera Protocol & Protección Extrema 🛡️
 
