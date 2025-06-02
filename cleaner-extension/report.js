@@ -12,14 +12,12 @@ function emoji(riesgo) {
 
 function renderCategoria(item) {
   return `
-  <div class="card shadow-sm mb-3">
-    <div class="card-body">
-      <h5 class="card-title">
-        <i class="bx bx-shield-quarter me-2"></i> ${item.nombre}
-      </h5>
-      <h6 class="card-subtitle text-muted mb-2">${item.tipo} — Riesgo: ${item.riesgo} ${item.emoji || emoji(item.riesgo)}</h6>
-      <p class="card-text"><strong>Comentario:</strong> ${item.comentario || "Sin comentario adicional."}</p>
-      <small class="text-muted">Dominio: ${item.dominio || "N/A"}</small>
+  <div class="panel sombra margen-abajo">
+    <div class="panel-cuerpo">
+      <h3 class="titulo-secundario">${item.nombre}</h3>
+      <p class="subtitulo texto-suave">${item.tipo} — Riesgo: ${item.riesgo} ${item.emoji || emoji(item.riesgo)}</p>
+      <p><strong>Comentario:</strong> ${item.comentario || "Sin comentario adicional."}</p>
+      <p class="texto-chico">Dominio: ${item.dominio || "N/A"}</p>
     </div>
   </div>
   `;
@@ -33,54 +31,31 @@ function renderReporte(reportData) {
   `;
 
   if (reportData.trackers?.length) {
-    html += `<h3>🎯 Trackers Detectados (${reportData.trackers.length})</h3>`;
-    reportData.trackers.forEach(t => { html += renderCategoria(t); });
-  }
-
-  if (reportData.hiddenIframes?.length) {
-    html += `<h3>🪟 Iframes Ocultos (${reportData.hiddenIframes.length})</h3>`;
-    reportData.hiddenIframes.forEach(i => { html += renderCategoria(i); });
-  }
-
-  if (reportData.evalScripts?.length) {
-    html += `<h3>⚠️ Scripts con Eval / Function</h3>`;
-    html += '<div class="accordion" id="evalAccordion">';
-    reportData.evalScripts.forEach((s, index) => {
-      html += `
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="heading${index}">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}">
-            Script #${index + 1}
-          </button>
-        </h2>
-        <div id="collapse${index}" class="accordion-collapse collapse" data-bs-parent="#evalAccordion">
-          <div class="accordion-body"><pre>${s.snippet}</pre></div>
-        </div>
-      </div>
-      `;
+    html += `<h2 class="titulo-secundario">Rastros Detectados</h2>`;
+    reportData.trackers.forEach(item => {
+      html += renderCategoria(item);
     });
-    html += '</div>';
+  } else {
+    html += `<div class="panel advertencia">No se detectaron rastreadores.</div>`;
   }
 
-  html += `
-    <h3>🕵️ Otros Indicadores</h3>
-    <ul class="list-group mb-4">
-      <li class="list-group-item">Caracteres invisibles: ${reportData.invisibleCharacterCount}</li>
-      <li class="list-group-item">Uso de sendBeacon: ${reportData.usesSendBeacon ? "✅ Sí" : "❌ No"}</li>
-      <li class="list-group-item">Fingerprinting: ${reportData.usesFingerprinting ? "✅ Sí" : "❌ No"}</li>
-    </ul>
-    <footer class="text-center text-muted mt-5">
-      <small>Invisible Cleaner v1.0.9 — generado el ${new Date().toLocaleString()}</small>
-    </footer>
-  `;
-
-  document.getElementById("reporteContenido").innerHTML = html;
+  return html;
 }
 
-chrome.storage.local.get("ultimoReporte", ({ ultimoReporte }) => {
-  if (ultimoReporte) {
-    renderReporte(ultimoReporte);
+document.addEventListener("DOMContentLoaded", () => {
+  let reportData = {};
+
+  try {
+    reportData = JSON.parse(localStorage.getItem("reporte"));
+  } catch (e) {
+    console.error("Error al cargar el reporte desde localStorage:", e);
+  }
+
+  const contenedor = document.getElementById("reporteContenido");
+
+  if (!reportData || !reportData.url) {
+    contenedor.innerHTML = "<div class='panel error'>No se encontró información para mostrar.</div>";
   } else {
-    document.getElementById("reporteContenido").innerHTML = "<p>No se encontró un informe reciente.</p>";
+    contenedor.innerHTML = renderReporte(reportData);
   }
 });

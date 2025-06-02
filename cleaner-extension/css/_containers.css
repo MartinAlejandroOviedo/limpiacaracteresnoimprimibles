@@ -1,0 +1,38 @@
+
+.container-desktop {
+  max-width: 1024px;
+  margin: auto;
+  padding: 20px;
+  min-width: 768px;
+}
+
+.container-tablet {
+  max-width: 768px;
+  margin: auto;
+  padding: 16px;
+  min-width: 500px;
+}
+
+.container-mobile {
+  max-width: 100%;
+  margin: auto;
+  padding: 12px;
+  min-width: 300px;
+}
+
+.container-auto {
+  margin: auto;
+  padding: 16px;
+}
+
+@media (min-width: 1025px) {
+  .container-auto { max-width: 1024px; }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container-auto { max-width: 768px; }
+}
+
+@media (max-width: 768px) {
+  .container-auto { max-width: 100%; padding: 12px; }
+}

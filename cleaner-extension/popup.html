@@ -1,53 +1,65 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Invisible Cleaner</title>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="popup.css">
+  <title>Invisible Cleaner</title>
+  <link rel="stylesheet" href="css/clean.css">
+  <style>
+    .estado-verde { color: green; font-weight: bold; }
+    .estado-naranja { color: orange; font-weight: bold; }
+    .estado-rojo { color: red; font-weight: bold; }
+    .titulo { font-size: 1.4rem; font-weight: bold; margin-bottom: 0.5rem; }
+    .subtitulo { font-size: 1.1rem; margin-top: 1rem; }
+    .seccion { margin-bottom: 1rem; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <header id="header" class="header">
-      <img id="website-favicon" class="favicon" src="" alt="Favicon" style="display: none;">
-      <span id="website-domain" class="domain">Cargando...</span>
-    </header>
+  <div class="container-mobile">
+    <div class="panel p-10">
+      <header class="seccion">
+        <span id="website-domain" class="titulo">Cargando...</span>
+      </header>
 
-    <section class="score-section">
-      <div id="score" class="score">Cargando diagnóstico...</div>
-    </section>
+      <section class="seccion">
+        <div id="score" class="score panel">Cargando diagnóstico...</div>
+      </section>
 
-    <section id="stats" class="stats-section">
-      <p>No se pudo recuperar el diagnóstico de esta pestaña. Asegúrate de que la página haya cargado completamente.</p>
-    </section>
+      <section id="stats" class="seccion list">
+        <p>No se pudo recuperar el diagnóstico de esta pestaña. Asegúrate de que la página haya cargado completamente.</p>
+      </section>
 
-    <section class="actions-section">
-      <button id="revert" class="btn">Revertir Tratamiento</button>
-      <button id="ignore" class="btn">Ignorar Tratamiento (Sesión)</button>
-      <button id="whitelist" class="btn">Agregar a Lista Blanca</button>
-      <button id="generate-report" class="btn">Generar Informe Detallado</button>
-    </section>
+      <section class="seccion">
+        <button id="revert" class="btn danger w-100">Revertir Tratamiento</button>
+        <button id="ignore" class="btn info w-100">Ignorar Tratamiento (Sesión)</button>
+        <button id="whitelist" class="btn success w-100">Agregar a Lista Blanca</button>
+        <button id="generate-report" class="btn w-100">Generar Informe Detallado</button>
+        <button id="export-reports" class="btn w-100">Exportar Reportes</button>
+        <button id="export-whitelist" class="btn w-100">Exportar Lista Blanca</button>
+      </section>
 
-    <section id="identitySection" class="identity-section" style="display: none;">
-      <h3>Modo de identidad digital</h3>
-      <label for="identityMode" class="label">Selecciona un modo:</label>
-      <select id="identityMode" class="select">
-        <option value="normal">🧍‍♂️ Normal</option>
-        <option value="croto">🧦 Croto</option>
-        <option value="billonario">👑 Billonario</option>
-      </select>
-    </section>
+      <section id="identitySection" class="seccion" style="display: none;">
+        <h3 class="subtitulo">Modo de identidad digital</h3>
+        <label for="identityMode" class="label">Selecciona un modo:</label>
+        <select id="identityMode" class="input w-100">
+          <option value="normal">🧍‍♂️ Normal</option>
+          <option value="croto">🧦 Croto</option>
+          <option value="billonario">👑 Billonario</option>
+        </select>
+      </section>
 
-    <section class="whitelist-section">
-      <h3>Lista Blanca</h3>
-      <ul id="whitelist-list" class="whitelist-list">
-        <li>Cargando lista blanca...</li>
-      </ul>
-    </section>
+      <section class="seccion">
+        <h3 class="subtitulo">Lista Blanca</h3>
+        <ul id="whitelist-list" class="list">
+          <li>Cargando lista blanca...</li>
+        </ul>
+      </section>
 
-    <footer class="about-section">
-      <p id="version-info">Invisible Cleaner</p>
-      <p>Herramienta de seguridad y privacidad web</p>
-    </footer>
+      <footer class="texto-centro texto-suave">
+        <p id="version-info">Invisible Cleaner</p>
+        <p>Herramienta de seguridad y privacidad web</p>
+      </footer>
+    </div>
   </div>
 
   <script src="popup.js"></script>
