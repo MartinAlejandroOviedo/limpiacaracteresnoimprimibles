@@ -3,6 +3,12 @@
 Registro de cambios por versión.
 
 ---
+## [1.1.2] — Corrección de lista blanca 🐛
+
+### Arreglos
+- Se unificó el uso de la lista blanca bajo la clave `listaBlanca`.
+- El botón "Agregar a Lista Blanca" ahora funciona correctamente.
+
 ## [1.1.1] — Interfaz Unificada con Clean.CSS ✨
 
 ### 💄 Cambios visuales
