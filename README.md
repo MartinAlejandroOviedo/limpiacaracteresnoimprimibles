@@ -65,7 +65,12 @@ cleaner-extension/
 
 ## 👨‍⚕️ Filosofía del Proyecto
 
-> *“Somos médicos digitales, no dioses. Diagnosticamos, tratamos y protegemos — pero siempre dejamos que el usuario decida.”*  
+> *“Somos médicos digitales, no dioses. Diagnosticamos, tratamos y protegemos — pero siempre dejamos que el usuario decida.”*
 > — Dr. Martín Oviedo, Fundación Web Limpia
 
 ---
+
+## 📄 Licencia
+
+Este proyecto se distribuye bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más información.
+

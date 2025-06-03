@@ -8,4 +8,4 @@ No se utilizan cookies, ni se integran herramientas de terceros que recojan info
 
 Para cualquier consulta, podés contactarnos a través del correo especificado en la Chrome Web Store.
 
-Última actualización: [fecha de hoy]
+Última actualización: 3 de junio de 2025
