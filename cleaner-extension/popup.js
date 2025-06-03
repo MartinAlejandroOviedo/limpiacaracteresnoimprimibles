@@ -1,12 +1,12 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const stats = document.getElementById("stats");
   const score = document.getElementById("score");
   const whitelistList = document.getElementById("whitelist-list");
-
   const exportReportsBtn = document.getElementById("export-reports");
   const exportWhitelistBtn = document.getElementById("export-whitelist");
+  const generateBtn = document.getElementById("generate-report");
 
+  // Botón para exportar reportes
   exportReportsBtn?.addEventListener("click", () => {
     chrome.storage.local.get("reportesPorDominio", ({ reportesPorDominio }) => {
       if (reportesPorDominio) {
@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Botón para exportar lista blanca
   exportWhitelistBtn?.addEventListener("click", () => {
     chrome.storage.sync.get("whitelist", ({ whitelist }) => {
       const blob = new Blob([JSON.stringify(whitelist || [], null, 2)], { type: "application/json" });
@@ -35,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const generateBtn = document.getElementById("generate-report");
+  // Botón generar diagnóstico manual
   generateBtn?.addEventListener("click", () => {
     chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
       if (!tab || !tab.id || tab.url.startsWith("chrome://") || tab.url.startsWith("chrome-extension://")) {
@@ -60,19 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  chrome.storage.sync.get("whitelist", ({ whitelist }) => {
-    whitelistList.innerHTML = "";
-    if (whitelist && whitelist.length > 0) {
-      whitelist.forEach(domain => {
-        const li = document.createElement("li");
-        li.textContent = domain;
-        whitelistList.appendChild(li);
-      });
-    } else {
-      whitelistList.innerHTML = "<li>La lista blanca está vacía.</li>";
-    }
-  });
-
+  // Cargar diagnóstico actual
   chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
     if (!tab || !tab.id) return;
     chrome.tabs.sendMessage(tab.id, { action: "reanalyzeNow" }, (response) => {
@@ -112,6 +101,37 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       stats.innerHTML = `<ul>${sintomas.map(s => `<li>${s}</li>`).join("")}</ul>`;
+    });
+  });
+
+  // 🔁 Cargar y mostrar lista blanca
+  chrome.storage.sync.get("whitelist", ({ whitelist }) => {
+    const lista = whitelist || [];
+    whitelistList.innerHTML = "";
+
+    if (lista.length === 0) {
+      whitelistList.innerHTML = "<li>La lista blanca está vacía.</li>";
+      return;
+    }
+
+    lista.forEach((dominio) => {
+      const li = document.createElement("li");
+      li.textContent = dominio;
+
+      const borrarBtn = document.createElement("button");
+      borrarBtn.textContent = "🗑️";
+      borrarBtn.style.marginLeft = "10px";
+      borrarBtn.style.cursor = "pointer";
+      borrarBtn.onclick = () => {
+        const nuevaLista = lista.filter(d => d !== dominio);
+        chrome.storage.sync.set({ whitelist: nuevaLista }, () => {
+          alert(`❌ ${dominio} eliminado de la lista blanca.`);
+          location.reload(); // Más simple que re-renderizar a mano
+        });
+      };
+
+      li.appendChild(borrarBtn);
+      whitelistList.appendChild(li);
     });
   });
 });

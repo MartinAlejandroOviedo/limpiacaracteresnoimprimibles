@@ -12,12 +12,16 @@ function emoji(riesgo) {
 
 function renderCategoria(item) {
   return `
-  <div class="panel sombra margen-abajo">
+  <div class="panel sombra margen-bajo">
     <div class="panel-cuerpo">
-      <h3 class="titulo-secundario">${item.nombre}</h3>
-      <p class="subtitulo texto-suave">${item.tipo} — Riesgo: ${item.riesgo} ${item.emoji || emoji(item.riesgo)}</p>
+      <h3 class="titulo-panel">
+        ${item.nombre || "Tracker detectado"}
+      </h3>
+      <h4 class="subtitulo-panel">
+        ${item.tipo} — Riesgo: ${item.riesgo} ${item.emoji || emoji(item.riesgo)}
+      </h4>
       <p><strong>Comentario:</strong> ${item.comentario || "Sin comentario adicional."}</p>
-      <p class="texto-chico">Dominio: ${item.dominio || "N/A"}</p>
+      <p class="info-secundaria">Dominio: ${item.dominio || "N/A"}</p>
     </div>
   </div>
   `;
@@ -32,7 +36,16 @@ function renderReporte(reportData) {
 
   if (reportData.trackers?.length) {
     html += `<h2 class="titulo-secundario">Rastros Detectados</h2>`;
-    reportData.trackers.forEach(item => {
+
+    const vistos = new Set();
+    const unicos = reportData.trackers.filter(t => {
+      const key = t.dominio + "|" + t.riesgo + "|" + t.tipo;
+      if (vistos.has(key)) return false;
+      vistos.add(key);
+      return true;
+    });
+
+    unicos.forEach(item => {
       html += renderCategoria(item);
     });
   } else {
