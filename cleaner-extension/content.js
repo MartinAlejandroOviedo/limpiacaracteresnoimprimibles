@@ -1,36 +1,10 @@
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "reanalyzeNow") {
-    const hostname = new URL(location.href).hostname;
+// content.js
 
-    // Verificar si está en la lista blanca
-    chrome.storage.local.get("listaBlanca", ({ listaBlanca }) => {
-      const lista = listaBlanca || [];
-
-      if (lista.includes(hostname)) {
-        console.log(`🛡️ Dominio en lista blanca: ${hostname}. Análisis omitido.`);
-        sendResponse({ status: "omitido", message: "Dominio en lista blanca" });
-        return;
-      }
-
-      if (typeof generateDetailedReportData === 'function') {
-        const report = generateDetailedReportData();
-
-        chrome.storage.local.get("reportesPorDominio", ({ reportesPorDominio }) => {
-          const reportes = reportesPorDominio || {};
-          reportes[hostname] = report;
-
-          chrome.storage.local.set({ diagnostico: report, reportesPorDominio: reportes }, () => {
-            sendResponse({ status: "ok", diagnostico: report });
-          });
-        });
-      } else {
-        sendResponse({ status: "error", message: "generateDetailedReportData not available" });
-      }
-    });
-
-    return true; // indica que sendResponse será llamado de forma asíncrona
-  }
-});
+const SECURE_DOMAINS = [
+  "paypal.com", "bbva.com", "santander.com", "bancoprovincia.com.ar", "bna.com.ar", 
+  "galicia.com.ar", "mercadopago.com", "visa.com", "mastercard.com", "americanexpress.com", 
+  "stripe.com", "hsbc.com", "icbc.com", "bancociudad.com.ar", "macro.com.ar", "brubank.com", "uala.com.ar"
+];
 
 function generateDetailedReportData() {
   const trackers = [...document.querySelectorAll('script[src*="track"], script[src*="analytics"], script[src*="ads"], script[src*="facebook"], script[src*="google"], script[src*="gtm"]')].map(s => ({
@@ -82,3 +56,43 @@ function generateDetailedReportData() {
     estado
   };
 }
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "reanalyzeNow") {
+    const hostname = new URL(location.href).hostname;
+    chrome.storage.sync.get("whitelist", ({ whitelist }) => {
+      const lista = whitelist || [];
+      const isSecure = SECURE_DOMAINS.some(domain => hostname.endsWith(domain));
+      const isWhitelisted = lista.includes(hostname);
+
+      if (isWhitelisted || isSecure) {
+        if (typeof generateDetailedReportData === 'function') {
+          const report = generateDetailedReportData();
+          chrome.storage.local.get("reportesPorDominio", ({ reportesPorDominio }) => {
+            const reportes = reportesPorDominio || {};
+            reportes[hostname] = report;
+            chrome.storage.local.set({ diagnostico: report, reportesPorDominio: reportes }, () => {
+              sendResponse({ status: "ok", diagnostico: report });
+            });
+          });
+        } else {
+          sendResponse({ status: "error", message: "generateDetailedReportData not available" });
+        }
+      } else {
+        if (typeof generateDetailedReportData === 'function') {
+          const report = generateDetailedReportData();
+          chrome.storage.local.get("reportesPorDominio", ({ reportesPorDominio }) => {
+            const reportes = reportesPorDominio || {};
+            reportes[hostname] = report;
+            chrome.storage.local.set({ diagnostico: report, reportesPorDominio: reportes }, () => {
+              sendResponse({ status: "ok", diagnostico: report });
+            });
+          });
+        } else {
+          sendResponse({ status: "error", message: "generateDetailedReportData not available" });
+        }
+      }
+    });
+    return true;
+  }
+});
