@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const exportReportsBtn = document.getElementById("export-reports");
   const exportWhitelistBtn = document.getElementById("export-whitelist");
   const generateBtn = document.getElementById("generate-report");
+  const addWhitelistBtn = document.getElementById("btnListaBlanca");
 
   // Botón para exportar reportes
   exportReportsBtn?.addEventListener("click", () => {
@@ -25,14 +26,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Botón para exportar lista blanca
   exportWhitelistBtn?.addEventListener("click", () => {
-    chrome.storage.sync.get("whitelist", ({ whitelist }) => {
-      const blob = new Blob([JSON.stringify(whitelist || [], null, 2)], { type: "application/json" });
+    chrome.storage.local.get("listaBlanca", ({ listaBlanca }) => {
+      const blob = new Blob([JSON.stringify(listaBlanca || [], null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "whitelist.json";
+      a.download = "listaBlanca.json";
       a.click();
       URL.revokeObjectURL(url);
+    });
+  });
+
+  // Botón para agregar dominio a la lista blanca
+  addWhitelistBtn?.addEventListener("click", () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+      if (!tab || !tab.url) return;
+      const hostname = new URL(tab.url).hostname;
+      chrome.storage.local.get("listaBlanca", ({ listaBlanca }) => {
+        const lista = listaBlanca || [];
+        if (lista.includes(hostname)) {
+          alert(`${hostname} ya está en la lista blanca.`);
+          return;
+        }
+        lista.push(hostname);
+        chrome.storage.local.set({ listaBlanca: lista }, () => {
+          alert(`✅ ${hostname} agregado a la lista blanca.`);
+          location.reload();
+        });
+      });
     });
   });
 
@@ -105,8 +126,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 🔁 Cargar y mostrar lista blanca
-  chrome.storage.sync.get("whitelist", ({ whitelist }) => {
-    const lista = whitelist || [];
+  chrome.storage.local.get("listaBlanca", ({ listaBlanca }) => {
+    const lista = listaBlanca || [];
     whitelistList.innerHTML = "";
 
     if (lista.length === 0) {
@@ -124,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
       borrarBtn.style.cursor = "pointer";
       borrarBtn.onclick = () => {
         const nuevaLista = lista.filter(d => d !== dominio);
-        chrome.storage.sync.set({ whitelist: nuevaLista }, () => {
+        chrome.storage.local.set({ listaBlanca: nuevaLista }, () => {
           alert(`❌ ${dominio} eliminado de la lista blanca.`);
           location.reload(); // Más simple que re-renderizar a mano
         });

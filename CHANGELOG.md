@@ -3,6 +3,20 @@
 Registro de cambios por versión.
 
 ---
+## [1.1.2] — Corrección de lista blanca 🐛
+
+### Arreglos
+- Se unificó el uso de la lista blanca bajo la clave `listaBlanca`.
+- El botón "Agregar a Lista Blanca" ahora funciona correctamente.
+
+## [1.1.3] — Exportaciones y Licencia 📂
+
+### Mejoras
+- Botones para exportar reportes y la lista blanca añadidos al popup.
+- Política de privacidad actualizada con fecha real.
+- Eliminado script obsoleto de actualización de trackers.
+- Se agregó el archivo LICENSE con licencia MIT y se mencionó en el README.
+
 ## [1.1.1] — Interfaz Unificada con Clean.CSS ✨
 
 ### 💄 Cambios visuales
